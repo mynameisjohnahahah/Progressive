@@ -9,26 +9,13 @@
       </span>
       <span>实验分类</span>
     </header>
-    <div class="item-type one">
-      <icon class="icon" name="#icon-book-2" />
-      <router-link to="/SpExp/行为实验">行为实验</router-link>
+    <div v-if="JSON.stringify(items)!=='[]'">
+      <div class="item-type one" v-for="(item, index) in items" :key="index">
+        <icon class="icon" name="#icon-book-2" />
+        <router-link to="/SpExp/行为实验">{{item.name}}</router-link>
+      </div>
     </div>
-    <div class="item-type two">
-      <icon class="icon" name="#icon-crayons-1" />
-      <router-link to="/SpExp/行为实验">行为实验</router-link>
-    </div>
-    <div class="item-type three">
-      <icon class="icon" name="#icon-push-pin" />
-      <router-link to="/SpExp/行为实验">行为实验</router-link>
-    </div>
-    <div class="item-type four">
-      <icon class="icon" name="#icon-dna" />
-      <router-link to="/SpExp/行为实验">行为实验</router-link>
-    </div>
-    <div class="item-type five">
-      <icon class="icon" name="#icon-head-cross" />
-      <router-link to="/SpExp/行为实验">行为实验</router-link>
-    </div>
+    <div v-else class="items-else">暂无数据</div>
     <!-- modal -->
     <div v-show="showModal" ref="test">
       <div class="modal" @click="hiddenModal"></div>
@@ -46,7 +33,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Icon from '@/components/Icon/Icon.vue';
-import { getMovieDetail } from '@/api/main';
+import { getTypeItems, createType } from '@/api/main';
 @Component({
   components: {
     Icon,
@@ -56,12 +43,17 @@ export default class SelectType extends Vue {
   private msg!: number;
   private showModal!: boolean;
   private typeName!: string;
+  private items!: any[];
   private data() {
     return {
       msg: 0,
       showModal: false,
       typeName: '',
+      items: [],
     }
+  }
+  private async created() {
+    this.getItems()
   }
   private back() {
     this.$router.back()
@@ -75,13 +67,21 @@ export default class SelectType extends Vue {
   private hiddenModal() {
     this.showModal = false
   }
+  private async getItems() {
+    const res = await getTypeItems()
+    this.items = res.data
+  }
   private async addType() {
-    // if (this.typeName === '') {
-    //   alert('不能为空！')
-    //   return
-    // }
-    const res = await getMovieDetail()
-    console.log(res)
+    if (this.typeName === '') {
+      alert('不能为空！')
+      return
+    }
+    const res = await createType({name: this.typeName})
+    if (res.msg === 'success' && res.code === 1) {
+      this.typeName = ''
+      this.showModal = false
+      this.getItems()
+    }
   }
 }
 </script>
@@ -143,6 +143,10 @@ header {
     display: inline-block;
     line-height: 5rem;
   }
+}
+.items-else {
+  text-align: center;
+  font-size: 15px;
 }
 .modal {
   width: 100%;
