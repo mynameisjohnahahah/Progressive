@@ -5,7 +5,7 @@ const Home = () => import('./views/Home/Home.vue');
 const SelectType = () => import('./views/SelectType/SelectType.vue');
 const Items = () => import('./views/Items/Items.vue');
 const Details = () => import('./views/Details/Details.vue');
-
+const CreateType = () => import('./views/CreateType/CreateType.vue');
 Vue.use(Router);
 
 export default new Router({
@@ -29,6 +29,11 @@ export default new Router({
       path: '/Details',
       name: 'Details',
       component: Details,
+    },
+    {
+      path: '/CreateType',
+      name: 'CreateType',
+      component: CreateType,
     },
   ],
 });

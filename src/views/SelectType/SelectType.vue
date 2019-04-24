@@ -4,6 +4,9 @@
       <span class="back" @click="back">
         <img class="arrow" src="../../images/down.png" alt="">
       </span>
+      <span class="add" @click="showModalFunc">
+        +
+      </span>
       <span>实验分类</span>
     </header>
     <div class="item-type one">
@@ -26,13 +29,24 @@
       <icon class="icon" name="#icon-head-cross" />
       <router-link to="/SpExp/行为实验">行为实验</router-link>
     </div>
-    <!-- 分类 -->
+    <!-- modal -->
+    <div v-show="showModal" ref="test">
+      <div class="modal" @click="hiddenModal"></div>
+      <div class="content">
+        <h2>创建新分类</h2>
+        <div class="name">
+          <input type="text" v-model="typeName" placeholder="输入分类名称">
+        </div>
+        <div class="addButton" @click="addType">添加</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import Icon from '@/components/Icon/Icon.vue';
+import { getMovieDetail } from '@/api/main';
 @Component({
   components: {
     Icon,
@@ -40,13 +54,34 @@ import Icon from '@/components/Icon/Icon.vue';
 })
 export default class SelectType extends Vue {
   private msg!: number;
+  private showModal!: boolean;
+  private typeName!: string;
   private data() {
     return {
       msg: 0,
+      showModal: false,
+      typeName: '',
     }
   }
   private back() {
     this.$router.back()
+  }
+  private NavtoCreate() {
+    this.$router.push('/CreateType')
+  }
+  private showModalFunc() {
+    this.showModal = true
+  }
+  private hiddenModal() {
+    this.showModal = false
+  }
+  private async addType() {
+    // if (this.typeName === '') {
+    //   alert('不能为空！')
+    //   return
+    // }
+    const res = await getMovieDetail()
+    console.log(res)
   }
 }
 </script>
@@ -68,6 +103,11 @@ header {
     position: absolute;
     top: 0;
     left: 1rem;
+  }
+  .add {
+    position: absolute;
+    top: 0;
+    right: 2rem;
   }
 }
 .item-type {
@@ -104,4 +144,48 @@ header {
     line-height: 5rem;
   }
 }
+.modal {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+}
+.content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background: #fff;
+    width: 17rem;
+    height: 10rem;
+    h2 {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      line-height: 3rem;
+      border-bottom: 1px solid #000;
+    }
+    .name {
+      text-align: center;
+      input {
+        width: 90%;
+        padding: 0;
+        margin-top: 1rem;
+        border: 0;
+        height: 2rem;
+      }
+    }
+    .addButton {
+      width: 100%;
+      height: 3rem;
+      background: #4988ff;
+      color: #fff;
+      text-align: center;
+      line-height: 3rem;
+      position: absolute;
+      bottom: 0;
+    }
+  }
 </style>
