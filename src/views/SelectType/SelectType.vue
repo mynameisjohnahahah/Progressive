@@ -53,6 +53,7 @@ export default class SelectType extends Vue {
     }
   }
   private async created() {
+    console.log(this.$store)
     this.getItems()
   }
   private back() {

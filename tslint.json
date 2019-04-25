@@ -20,6 +20,11 @@
       false,
       "always"
     ],
-    "no-console": false
+    "no-console": false,
+    "no-debugger": false,
+    "space-before-function-paren": false,
+    "array-type": [true, "array", "generic", "array-simple"],
+    "trailing-comma": false,
+    "eofline": false
   }
 }
