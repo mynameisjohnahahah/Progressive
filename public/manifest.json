@@ -1,6 +1,6 @@
 {
   "name": "browse-exp",
-  "short_name": "browse-exp",
+  "short_name": "pwa测试",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",

@@ -33,6 +33,11 @@ header {
       line-height: 4.2rem;
     }
   }
+  .add {
+    position: absolute;
+    top: 0;
+    right: 2rem;
+  }
 }
 
 // 将块级元素设置为半径为 radius的圆形

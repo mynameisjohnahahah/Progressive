@@ -17,9 +17,8 @@ const actions: ActionTree<selectType.SelectTypeState, any> = {
   }
 }
 const mutations: MutationTree<selectType.SelectTypeState> = {
-  [type.GET__TYPEITEMS](state1, data: selectType.TypeItems) {
-    console.log(data, state)
-    state1.items = []
+  [type.GET__TYPEITEMS](stateRename, data) {
+    stateRename.items = data
   },
 }
 export { state, actions, mutations };

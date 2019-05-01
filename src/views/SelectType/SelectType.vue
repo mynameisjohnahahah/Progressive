@@ -7,12 +7,12 @@
       <span class="add" @click="showModalFunc">
         +
       </span>
-      <span>实验分类</span>
+      <span>分类</span>
     </header>
     <div v-if="JSON.stringify(items)!=='[]'">
       <div class="item-type one" v-for="(item, index) in items" :key="index">
         <icon class="icon" name="#icon-book-2" />
-        <router-link to="/SpExp/行为实验">{{item.name}}</router-link>
+        <router-link to="">{{item.name}}</router-link>
       </div>
     </div>
     <div v-else class="items-else">暂无数据</div>
@@ -32,29 +32,31 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Action, State } from 'vuex-class';
 import Icon from '@/components/Icon/Icon.vue';
 import { getTypeItems, createType } from '@/api/main';
+import { GET__TYPEITEMS } from '@/store/selectType/type';
+import { SelectTypeState } from '@/store/interface/SelectType'
 @Component({
   components: {
     Icon,
   },
 })
 export default class SelectType extends Vue {
+  @Action(GET__TYPEITEMS) private getType!: () => never;
+  @State((state) => state.selectType.items) private items!: SelectTypeState;
   private msg!: number;
   private showModal!: boolean;
   private typeName!: string;
-  private items!: any[];
   private data() {
     return {
       msg: 0,
       showModal: false,
       typeName: '',
-      items: [],
     }
   }
   private async created() {
-    console.log(this.$store)
-    this.getItems()
+    this.getType()
   }
   private back() {
     this.$router.back()
@@ -68,10 +70,6 @@ export default class SelectType extends Vue {
   private hiddenModal() {
     this.showModal = false
   }
-  private async getItems() {
-    const res = await getTypeItems()
-    this.items = res.data
-  }
   private async addType() {
     if (this.typeName === '') {
       alert('不能为空！')
@@ -81,7 +79,7 @@ export default class SelectType extends Vue {
     if (res.msg === 'success' && res.code === 1) {
       this.typeName = ''
       this.showModal = false
-      this.getItems()
+      this.getType()
     }
   }
 }
@@ -89,28 +87,6 @@ export default class SelectType extends Vue {
 
 <style lang="scss" scoped>
 @import '../../style/common.scss';
-header {
-  height: 4.2rem;
-  text-align: center;
-  background-color: $theme-color;
-  font-size: 1.6rem;
-  color: #fff;
-  margin-bottom: 2rem;
-  position: relative;
-  span {
-    line-height: 4.2rem;
-  }
-  .back {
-    position: absolute;
-    top: 0;
-    left: 1rem;
-  }
-  .add {
-    position: absolute;
-    top: 0;
-    right: 2rem;
-  }
-}
 .item-type {
   width: 90%;
   margin: 1.6rem auto;
@@ -163,23 +139,27 @@ header {
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     background: #fff;
-    width: 17rem;
-    height: 10rem;
+    width: 90%;
+    height: 13rem;
     h2 {
       padding: 0;
       margin: 0;
       text-align: center;
       line-height: 3rem;
-      border-bottom: 1px solid #000;
+      border-bottom: 1px solid #c3c3c3;
     }
     .name {
       text-align: center;
+      height: 40%;
       input {
         width: 90%;
         padding: 0;
-        margin-top: 1rem;
+        margin-top: 5%;
         border: 0;
-        height: 2rem;
+        height: 100%;
+        border-color: #fff;
+        outline: none;
+        font-size: 23px;
       }
     }
     .addButton {
